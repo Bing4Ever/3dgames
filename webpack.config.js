@@ -16,18 +16,18 @@ function getEntry() {
 //Multi page template
 function getHtmlTemplate() {
     return glob
-      .sync('./src/examples/**/index.js')
-      .map((file) => {
-        return { name: file.match(/\/examples\/(.+)\/index.js/)[1], path: file };
-      })
-      .map(
-        (template) =>
-          new HtmlWebpackPlugin({
-            chunks: [template.name.toString()],
-            filename: `examples/${template.name}.html`,
-          })
-      );
-  }
+        .sync('./src/examples/**/index.js')
+        .map((file) => {
+            return { name: file.match(/\/examples\/(.+)\/index.js/)[1], path: file };
+        })
+        .map(
+            (template) =>
+                new HtmlWebpackPlugin({
+                    chunks: [template.name.toString()],
+                    filename: `examples/${template.name}.html`,
+                })
+        );
+}
 
 module.exports = {
     mode: 'development',
@@ -55,7 +55,15 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'assets/images/'
+                        }
+                    }
+                ]
             },
             {
                 test: /\.(glb|gltf)$/,
